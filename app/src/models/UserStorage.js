@@ -1,16 +1,22 @@
 "use strict";
+const fs =require("fs").promises;
+
 
 class UserStorage{
-    static #users={
-        id:["leepaka","라이즈","방탄소년단"],
-        psword:["1234","1234","123456"],
-        name:["쇼타로","성찬","원빈"],
-    };
+    static #getUserInfo(){
+        const users= JSON.parse(data);
+        const idx = users.id.indexOf(id);
+        const userKey = Object.keys(users);//[id,pW,name]
+        const userInfo =userKey.reduce((newUser,info)=>{
+            newUser[info] = users[info][idx];
+            return newUser;
+        },{});
+        
 
-
-
+        return userInfo;
+    }
     static getUsers(...fields){
-        const users = this.#users;
+        // const users = this.#users;
         const newUsers =fields.reduce((newUsers,field)=>{
           
             if(users.hasOwnProperty(field)){
@@ -22,18 +28,18 @@ class UserStorage{
  }
 
  static getUserInfo(id){
-    const users =this.#users;
-    const idx = users.id.indexOf(id);
-    const userKey = Object.keys(users);//[id,pW,name]
-    const userInfo =userKey.reduce((newUser,info)=>{
-        newUser[info] = users[info][idx];
-        return newUser;
-    },{});
+  return fs.readFile("./src/databases/users.json")
+   .then((data) => {
+        return this.#getUserInfo(data,id);
+        })
+    
+        .catch(console.error);
+    }
 
-    return userInfo;
- }
+    
+        
  static save(userInfo){
-    const users = this.#users;
+    // const users = this.#users;
     users.id.push(userInfo.id);
     users.name.push(userInfo.name);
     users.psword.push(userInfo.psword);
